@@ -1,5 +1,5 @@
-import { IsNotEmpty, IsEmpty, isString, IsString, IsEmail, MinLength } from 'class-validator';
-export class CreateUserDto {
+import { IsNotEmpty, IsString, IsEmail, MinLength } from 'class-validator';
+export class UserSignUpDto {
    @IsNotEmpty({message:'name cannot be empty'})
    @IsString({message:'name should be string'})
     name:string;

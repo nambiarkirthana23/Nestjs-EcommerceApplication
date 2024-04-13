@@ -3,17 +3,23 @@ import {config} from 'dotenv'
 
 config()
 export const dataSourceOptions:DataSourceOptions={
-    type: 'mysql',
-    host:process.env.DB_HOST,
-    port: Number(process.env.DB_PORT),
-    username:process.env.DB_USERNAME,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
+    type: 'postgres',
+    // host:process.env.DB_HOST,
+    // port: Number(process.env.DB_PORT),
+    // username:process.env.DB_USERNAME,
+    // password: process.env.DB_PASSWORD,
+    // database: process.env.DB_NAME,
     // entities: [__dirname + '/**/*.entity{.ts,.js}'],
+    host:'localhost',
+    port:5432,
+    username:'postgres',
+    password:'kirthana',
+    database:'Ecommerce',
     entities:['dist/**/*.entity.js'],
      //migrations:['dist/db/migrations/*.js'],
-     //migrations:[],
-     synchronize:true,
+    //   migrations:['dist/db/migrations/*{.ts,js}'],
+    migrations:['dist/db/migrations/*.js'],
+     synchronize:false,
 
 };
 

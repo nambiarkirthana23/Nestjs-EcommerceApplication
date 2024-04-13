@@ -44,3 +44,5 @@ async function bootstrap() {
 }
 
 bootstrap();
+//npm run migration:generate -- db/migrations/initial
+//npm run migration:run

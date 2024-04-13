@@ -1,12 +1,13 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
+import {  UserSignUpDto } from './dto/signUp-userdto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './entities/user.entity';
 import { Repository } from 'typeorm';
 import { CONSTANT_MSG } from './common-dto/const';
 import { CommonService } from './common-service/common-service';
-
+import { hash } from 'bcrypt';
+import { SignInUserDto } from './dto/signIn-userdto';
+import { single } from 'rxjs';
 @Injectable()
 export class UsersService {
   constructor(
@@ -20,11 +21,17 @@ export class UsersService {
     
   // }
 
-
-  async signUp(body: CreateUserDto): Promise<any> {
+  async userSignUp(UserSignUpDto: UserSignUpDto): Promise<any> {
     try {
-        console.log(body);
-        let user = await this.UserRepository.save(body);
+        console.log("u",UserSignUpDto);
+        const userExist=await this.findUserByEmail(UserSignUpDto.email);
+        if(userExist)
+        {
+          return  this.commonService.errorMessage('',CONSTANT_MSG.EMAIL_NOT_AVAILABLE,HttpStatus.BAD_REQUEST)
+        }
+        UserSignUpDto.password= await hash(UserSignUpDto.password,10)
+        console.log("password",UserSignUpDto.password)
+        let user = await this.UserRepository.save(UserSignUpDto);
         console.log("query", user);
 
         if (!user) {
@@ -48,19 +55,28 @@ export class UsersService {
     }
 }
 
-  findAll() {
-    return `This action returns all users`;
+  // async findUserByEmail(email:string)
+  // {
+  //   return await this.UserRepository.findOneBy({email});
+  // }
+
+
+  async findUserByEmail(email: string) {
+    return  this.UserRepository.findOne({ where: { email } });
+  }
+  async signInUser(SignInUserDto:SignInUserDto)
+  {
+    try{
+         console.log("signInUserDto",SignInUserDto);
+    }
+    catch(error)
+    {
+        console.log(error);
+        return error;
+
+    }
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
+  
 }
